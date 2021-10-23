@@ -1,0 +1,127 @@
+ private String mode;
+    private Boats[] playerBoats;
+//Instance Variable for the board
+
+    public String[][] getArray(){return array1;}
+    public String getMode(){return mode;}
+    public Boats[] getPlayerBoats(){return playerBoats;}
+    public int getRows(){return rows;}
+    public int getCols(){return cols;}
+    public Board(String mod) {//constructor if input is mode of the game
+        if (mod.equals("Standard") || mod.equals("standard")) {//Uppercase or lowercase robustness
+            rows = 8;
+            cols = 8;
+            array1 = new String[rows][cols];
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    array1[i][j] = " - ";
+                }
+            }
+            playerBoats = new Boats[5];
+            mode = "Standard";
+        }
+        if (mod.equals("Expert") || mod.equals("expert")) {
+            rows = 12;
+            cols = 12;
+            array1 = new String[rows][cols];
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    array1[i][j] = " - ";
+                }
+            }
+            playerBoats = new Boats[10];
+            mode = "Expert";
+        }
+    }
+
+
+    public void display() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                System.out.print(array1[i][j]);
+            }
+            System.out.println();
+        }
+    }
+
+
+    public Boats generateBoat(int len, int serNum) {
+        Boolean status = false;//able to place or not(if overlap, overboard, etc)
+        int x = 0;
+        int y = 0;
+        Boolean direction = true;
+        Boats result = new Boats(len);
+        while (!status) {//try until a fit is found
+            x = (int) Math.floor(Math.random() * rows);//random starting location
+            y = (int) Math.floor(Math.random() * cols);
+            direction = true;//horizontal
+            if (Math.random() < 0.5) {
+                direction = false;
+            }//50% chance for vertical
+            if (direction == true) {
+                for (int i = 0; i < len; i++) {
+                    if (x >= 0 && x < rows && y + i >= 0 && y + i < cols && array1[x][y + i].equals(" - ")) {//test for condition
+                        status = true;
+                    } else {
+                        status = false;
+                        break;
+                    }
+                }
+            } else {
+                for (int i = 0; i < len; i++) {
+                    if (x + i >= 0 && x + i < rows && y >= 0 && y < cols && array1[x + i][y].equals(" - ")) {//test for condition
+                        status = true;
+                    } else {
+                        status = false;
+                        break;
+                    }
+                }
+            }
+        }
+        if (direction == true) {//actual placement for horizontal boats
+            for (int i = 0; i < len; i++) {
+                array1[x][y + i] = " "+serNum +" ";
+                result.getPlacement()[0][i] = x;
+                result.getPlacement()[1][i] = y;
+            }
+        } else {//placement for vertical boats
+            for (int i = 0; i < len; i++) {
+                array1[x + i][y] = " "+serNum +" ";
+                result.getPlacement()[0][i] = x;
+                result.getPlacement()[1][i] = y;
+            }
+        }
+        return result;
+    }
+
+    public void placeBoats() {
+
+        if (mode.equals("Standard") || mode.equals("standard")) {//generating boats on to the board
+            playerBoats[0] = generateBoat(5,1);
+            playerBoats[1] = generateBoat(4,2);
+            playerBoats[2] = generateBoat(3,3);
+            playerBoats[3] = generateBoat(3,4);
+            playerBoats[4] = generateBoat(2,5);
+
+        }
+
+        if (mode.equals("Expert") || mode.equals("expert")) {
+            playerBoats[0] = generateBoat(5,1);
+            playerBoats[1] = generateBoat(5,2);
+            playerBoats[2] = generateBoat(4,3);
+            playerBoats[3] = generateBoat(4,4);
+            playerBoats[4] = generateBoat(3,5);
+            playerBoats[5] = generateBoat(3,6);
+            playerBoats[6] = generateBoat(3,7);
+            playerBoats[7] = generateBoat(3,8);
+            playerBoats[8] = generateBoat(2,9);
+            playerBoats[9] = generateBoat(2,0);
+
+
+        }
+    }
+
+    public static void main(String[] args) {
+
+    }
+}
