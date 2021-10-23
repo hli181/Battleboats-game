@@ -1,0 +1,18 @@
+public class Boats {
+    private int length;
+    private int[][] placement;
+    private boolean sunk = false;
+
+    public Boats(int length){
+        this.length = length;
+        placement = new int[2][length];
+
+    }
+    public int[][] getPlacement(){
+        return placement;
+    }
+    public int getLength(){
+        return length;
+    }
+
+}
